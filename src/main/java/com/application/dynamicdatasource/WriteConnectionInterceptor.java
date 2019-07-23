@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Order(20)
+@Order(2)
 public class WriteConnectionInterceptor  {
     private static final Logger log = LoggerFactory.getLogger(WriteConnectionInterceptor.class);
 
