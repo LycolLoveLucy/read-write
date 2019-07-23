@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Order(20)
+@Order(2)
 public class ReadOnlyConnectionInterceptor  {
 
 	private static final Logger log = LoggerFactory.getLogger(ReadOnlyConnectionInterceptor.class);
