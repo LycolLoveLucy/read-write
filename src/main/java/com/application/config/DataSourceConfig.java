@@ -7,12 +7,14 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -23,17 +25,20 @@ import java.util.Map;
 public class DataSourceConfig {
 
 
+
     @Bean(name = "readSource")
-    @ConfigurationProperties(prefix = "spring.datasource.read")
     @Primary
     public DataSource readSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create().url("jdbc:h2:mem:test;MODE=Oracle").username("root")
+                .password("123456")
+                .driverClassName("org.h2.Driver").build();
     }
 
     @Bean(name = "writeSource")
-    @ConfigurationProperties(prefix = "spring.datasource.write")
     public DataSource writeSource() {
-        return DataSourceBuilder.create().build();
+       return DataSourceBuilder.create().url("jdbc:h2:mem:write_db;MODE=Oracle").username("root")
+                .password("123456")
+                .driverClassName("org.h2.Driver").build();
     }
 
 
