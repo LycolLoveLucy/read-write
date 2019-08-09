@@ -2,7 +2,6 @@ package com.application.dynamicdatasource;
 
 import com.application.dynamicdatasource.routing.DbContextHolder;
 import com.application.dynamicdatasource.routing.DbType;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
