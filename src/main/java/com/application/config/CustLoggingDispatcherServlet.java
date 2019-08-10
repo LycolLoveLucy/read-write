@@ -1,5 +1,6 @@
 package com.application.config;
 
+import com.baomidou.mybatisplus.core.injector.methods.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -16,6 +17,8 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CustLoggingDispatcherServlet extends DispatcherServlet {
 
@@ -36,7 +39,6 @@ public class CustLoggingDispatcherServlet extends DispatcherServlet {
 
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-        //创建一个 json 对象，用来存放 http 日志信息
         ObjectNode rootNode = mapper.createObjectNode();
         rootNode.put("uri", requestWrapper.getRequestURI());
         rootNode.put("clientIp", requestWrapper.getRemoteAddr());
@@ -107,10 +109,27 @@ public class CustLoggingDispatcherServlet extends DispatcherServlet {
 
     }
 
-    final  List<String> resourceRequestsURI = Arrays.asList(
-            "/css/", "/js/", "/scss/", "/fonts/","/error",
-            ".css", ".js", ".scss", ".eot",
-            ".svg", ".ttf", ".woff", ".otf", ".ico", ".png");
+    static  final   List<String> resourceRequestsURI;
+
+    static {
+        resourceRequestsURI = Stream.of(
+                "/css/",
+                "/js/",
+                "/scss/",
+                "/fonts/",
+                "/error",
+                ".css",
+                ".js",
+                ".scss",
+                ".eot",
+                ".svg",
+                ".ttf",
+                ".woff",
+                ".otf",
+                ".ico",
+                ".png"
+        ).collect(Collectors.toList());
+    }
 
     final List<String> swaggerRequestURI = Arrays.asList(
             "/v2/api-docs", "/swagger-resources","swagger-ui");
