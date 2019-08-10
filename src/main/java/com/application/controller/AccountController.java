@@ -1,19 +1,29 @@
 package com.application.controller;
 
+import com.application.entity.Account;
+import com.application.mapper.UserMapper;
 import com.application.service.AccountService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class AccountController {
 
-    ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    UserMapper userMapper;
 
     @GetMapping("/getReadAccountInfo")
     public String getAccountInfo()  {
@@ -22,7 +32,22 @@ public class AccountController {
 
     @GetMapping("/getWriteAccountInfo")
     public String getWriteAccountInfo() throws JsonProcessingException {
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        return objectMapper.writeValueAsString(accountService.getWriteAccountInfo());
+        return accountService.getWriteAccountInfo().get(0).getName();
+
     }
+
+    @PostMapping("/testBatchInsert")
+    public ResponseEntity testBatchInsert(@RequestBody List<Account> accountList) throws JsonProcessingException
+    {
+        accountList.forEach(e->e.setId(UUID.randomUUID().toString().replaceAll("-","")));
+        userMapper.insertBatch(accountList);
+        return ResponseEntity.ok(accountList);
+
+    }
+    @PostMapping("/testPostLog")
+    public  Map<String,Object> testPostLog(@RequestBody Map<String,Object> requestMap) throws JsonProcessingException {
+        return requestMap;
+
+    }
+
 }

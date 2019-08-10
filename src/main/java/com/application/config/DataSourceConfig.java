@@ -2,19 +2,18 @@ package com.application.config;
 
 import com.application.dynamicdatasource.routing.DbType;
 import com.application.dynamicdatasource.routing.RoutingDataSource;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import plus.CustomerSqlInjector;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class DataSourceConfig {
     @Bean("routingDataSource")
     @Qualifier("routingDataSource")
     public RoutingDataSource routingDataSource(){
-        RoutingDataSource routingDataSource=  new   RoutingDataSource();
+        RoutingDataSource routingDataSource=  new RoutingDataSource();
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DbType.READ,readSource());
         targetDataSources.put(DbType.WRITE,writeSource());
@@ -56,14 +55,14 @@ public class DataSourceConfig {
     }
 
 
-    @Bean(name = "sqlSessionFactory")
+ /*   @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory dbSqlSessionFactory(@Qualifier("routingDataSource") RoutingDataSource dataSource
                                                  ) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean=new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
         return sqlSessionFactoryBean.getObject();
     }
-
+*/
 
     @Bean(name = "transactionManager")
     @Primary
@@ -76,6 +75,26 @@ public class DataSourceConfig {
     public SqlSessionTemplate dbSqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
+
+
+    @Bean(name = "globalConfiguration")
+    @Primary
+    public GlobalConfig globalConfiguration() {
+        GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setSqlInjector(new CustomerSqlInjector());
+        return globalConfig;
+    }
+
+    @Bean(name = "sqlSessionFactory")
+    @Primary
+    public SqlSessionFactory dbSqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource,
+                                                 @Qualifier("globalConfiguration") GlobalConfig globalConfiguration) throws Exception {
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setGlobalConfig(globalConfiguration);
+        return bean.getObject();
+    }
+
 
 
 
