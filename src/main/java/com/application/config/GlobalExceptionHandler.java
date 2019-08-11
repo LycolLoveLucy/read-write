@@ -10,7 +10,7 @@ public class GlobalExceptionHandler {
 
     private final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler({Exception.class})    //申明捕获那个异常类
+    @ExceptionHandler()
     public String test(Exception e) {
         logger.error(e.getMessage(), e);
         return e.getMessage();

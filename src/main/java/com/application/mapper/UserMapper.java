@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import plus.Page;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<Account>{
 
     @Select("select * from t_table")
-    List<Account> selectAllUserInfo();
+    List<Account> selectAllUserInfo(Page page,String param);
 
     int insertBatch(@Param(value = "items") Collection collection);
 }

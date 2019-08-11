@@ -27,16 +27,18 @@ import java.util.TimeZone;
 public class Application {
 
 
-	public static void main(String[] args) {
-		SpringApplication application=new SpringApplication(Application.class);
-		application.run(args);
-	}
-	@Bean
-	public ServletRegistrationBean dispatcherRegistration() {
-		return new ServletRegistrationBean(dispatcherServlet());
-	}
-	@Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
-	public DispatcherServlet dispatcherServlet() {
-		return new CustLoggingDispatcherServlet();
-	}
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication(Application.class);
+        application.run(args);
+    }
+
+    @Bean
+    public ServletRegistrationBean dispatcherRegistration() {
+        return new ServletRegistrationBean(dispatcherServlet());
+    }
+
+    @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+    public DispatcherServlet dispatcherServlet() {
+        return new CustLoggingDispatcherServlet();
+    }
 }

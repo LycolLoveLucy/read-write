@@ -35,6 +35,7 @@ public class CustLoggingDispatcherServlet extends DispatcherServlet {
     protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
         if(doNotWrapperDisptacher(request)){
             super.doDispatch(request,response);
+            return;
         }
 
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);

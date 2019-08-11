@@ -6,6 +6,7 @@ import com.application.entity.Account;
 import com.application.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import plus.Page;
 
 import java.util.List;
 
@@ -17,12 +18,14 @@ public class AccountService {
     UserMapper userMapper;
 
     @ReadOnlyConnection
-    public List<Account> getReadAccountInfo(){
-        return  userMapper.selectAllUserInfo();
+    public List<Account> getReadAccountInfo(Page page ){
+        page.setPageSize(2);
+        page.setCurrentPage(2);
+        return  userMapper.selectAllUserInfo(page,"");
     }
 
     @WriteConnection
     public List<Account> getWriteAccountInfo(){
-        return  userMapper.selectAllUserInfo();
+        return  userMapper.selectAllUserInfo(null,null);
     }
 }

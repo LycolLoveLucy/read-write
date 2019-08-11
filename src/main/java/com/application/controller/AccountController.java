@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import plus.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,12 @@ public class AccountController {
     UserMapper userMapper;
 
     @GetMapping("/getReadAccountInfo")
-    public String getAccountInfo()  {
-        return accountService.getReadAccountInfo().get(0).getName();
+    public ResponseEntity getAccountInfo()  {
+        Page page=new Page();
+
+        List records= accountService.getReadAccountInfo(page);
+        page.setRecords(records);
+        return  ResponseEntity.ok(page);
     }
 
     @GetMapping("/getWriteAccountInfo")

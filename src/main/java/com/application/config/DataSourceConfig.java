@@ -4,6 +4,7 @@ import com.application.dynamicdatasource.routing.DbType;
 import com.application.dynamicdatasource.routing.RoutingDataSource;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import plus.CustPaginationInterceptor;
 import plus.CustomerSqlInjector;
 
 import javax.sql.DataSource;
@@ -91,6 +93,7 @@ public class DataSourceConfig {
                                                  @Qualifier("globalConfiguration") GlobalConfig globalConfiguration) throws Exception {
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
+        bean.setPlugins(new Interceptor[]{new CustPaginationInterceptor()});
         bean.setGlobalConfig(globalConfiguration);
         return bean.getObject();
     }
