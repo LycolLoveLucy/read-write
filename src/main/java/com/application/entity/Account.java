@@ -8,6 +8,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("t_table")
 public class Account {
+    public Account() {
+    }
+
+    public Account(String id, String name) {
+        this.id = id;
+        this.name = name;
+
+    }
+
 
     @TableId(value = "id", type = IdType.AUTO)
     private String id;

@@ -10,7 +10,6 @@ import plus.Page;
 import java.util.Collection;
 import java.util.List;
 
-@Mapper
 public interface UserMapper extends BaseMapper<Account>{
 
     @Select("select * from t_table")
